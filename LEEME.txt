@@ -1,0 +1,25 @@
+Esta carpeta es la que se publica. Es autocontenida:
+
+  index.html       la propuesta completa (CSS, JS y logos incrustados) — 245 KB
+  frames/          72 cuadros WebP de 1600 px — 2.8 MB — escritorio
+  frames-movil/    los mismos 72 a 1000 px — 1.3 MB — pantallas angostas
+
+El motor elige el juego según el ancho de la ventana, y arranca el recorrido con los primeros
+12 cuadros mientras el resto sigue cargando de fondo. No espera los 72.
+
+index.html es la fuente: se edita directo. Lo que falta llenar está marcado con [[...]].
+
+Si se regeneran los cuadros (armar-frames.py / pulir-frames.py en ../04-secuencia-scroll),
+hay que refrescar las dos copias:
+
+    rm -rf frames frames-movil
+    cp -R ../04-secuencia-scroll/frames frames
+    cp -R ../04-secuencia-scroll/frames-movil frames-movil
+
+Para probar en local — con file:// no cargan los cuadros:
+
+    python3 -m http.server 8790
+
+y abrir http://localhost:8790/
+
+Para publicar en GitHub Pages: esta carpeta es la raíz del repo. Total a subir: 4.7 MB.
