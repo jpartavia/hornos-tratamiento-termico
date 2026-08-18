@@ -22,4 +22,9 @@ Para probar en local — con file:// no cargan los cuadros:
 
 y abrir http://localhost:8790/
 
-Para publicar en GitHub Pages: esta carpeta es la raíz del repo. Total a subir: 4.7 MB.
+PUBLICADA en https://jpartavia.github.io/hornos-tratamiento-termico/
+
+Esta carpeta ES el repo jpartavia/hornos-tratamiento-termico (Pages desde main, raíz).
+Para actualizar el link:
+
+    git add -A && git commit -m "..." && git push
