@@ -1,0 +1,324 @@
+<script>
+(function(){
+  "use strict";
+
+  /* ==================== CONFIGURACIÓN ==================== */
+  var CFG = {
+    /* dos juegos en WebP: el angosto para pantallas chicas. 1.3 MB contra 2.8 MB */
+    dir:  window.innerWidth < 900 ? "frames-movil/" : "frames/",
+    ext:  "webp", pad:4,
+    count: 121,          // frames de la secuencia fotográfica (beats 1 y 2)
+    arrancaCon: 20,      // no espera los 72: arranca con los primeros y sigue de fondo
+    fotoHasta: 0.34,     // hasta qué punto del scroll manda la foto (0–1)
+    fundido:  0.06,      // ancho de la disolvencia foto → esquema
+    vhPorBeat: 105       // alto de scroll por beat, en % de la ventana
+  };
+
+  /* Datos de los tres modelos (ver ../01-specs/specs-hornos-saftherm.md).
+     Cambie MODELO y todos los textos del recorrido se actualizan solos. */
+  var MODELOS = {
+    "STM-30-12W": { vol:"30 L", camara:"300 × 500 × 200 mm", kw:"7.5 kW", tipo:"Muffle de mesa" },
+    "STM-36-12":  { vol:"36 L", camara:"300 × 400 × 300 mm", kw:"9 kW",   tipo:"Muffle de mesa" },
+    "STD-96-12":  { vol:"96 L", camara:"400 × 600 × 400 mm", kw:"18 kW",  tipo:"Industrial de piso" }
+  };
+  var MODELO = "STM-36-12";   // el recorrido fotográfico es del muffle de mesa
+  var M = MODELOS[MODELO];
+
+  var VB_FULL = { x:0, y:0, w:1000, h:640 };
+
+  /* la etiqueta del corte usa las medidas del modelo activo */
+  (function(){
+    var el = document.getElementById("lblCamara");
+    if (el) el.textContent = "Cámara " + MODELOS[MODELO].camara;
+  })();
+
+  /* Beats. mode:"foto" → secuencia fotográfica · mode:"esquema" → corte técnico.
+     at   → posición en el scroll (0–1) donde entra el beat
+     hi   → pieza que se resalta en el esquema
+     foco → a dónde hace zoom el esquema
+     Nota: la tensión de alimentación se omite a propósito — la ficha dice 380 V y esa
+     tensión no existe en la red local (ver 01-specs). */
+  var BEATS = [
+    { mode:"foto", at:0.00, eyebrow:"Exterior", title:"Envolvente de doble capa",
+      text:"Estructura de acero en doble capa con aislamiento interno de fibra cerámica: la superficie exterior se mantiene manejable mientras la cámara trabaja a temperatura de proceso.",
+      specs:[M.tipo, M.vol + " de cámara", "Marcado CE"] },
+
+    { mode:"foto", at:0.19, eyebrow:"Cierre", title:"Apertura lateral con palanca",
+      text:"Puerta de apertura lateral con cierre de palanca y empaque de alta temperatura. El sello es lo que sostiene la uniformidad adentro y lo que evita perder calor por el marco.",
+      specs:["Apertura lateral","Cierre de palanca","Empaque de alta temperatura"] },
+
+    { mode:"esquema", at:0.42, hi:"camara", foco:{x:40,y:30,w:740,h:600},
+      eyebrow:"Cámara", title:"Fibra cerámica de alúmina",
+      text:"La cámara completa es de fibra cerámica de alúmina: baja inercia térmica, así el horno sube rápido y responde al control en vez de arrastrar calor acumulado.",
+      specs:[M.camara,"± 1 °C","Termopar tipo N"] },
+
+    { mode:"esquema", at:0.61, hi:"resistencias", foco:{x:104,y:96,w:640,h:520},
+      eyebrow:"Calefacción", title:"Calor por tres caras",
+      text:"Resistencia de alambre de alta aleación en las dos paredes laterales y el fondo. Calentar por tres caras a la vez es lo que da uniformidad en todo el volumen, no solo en el centro.",
+      specs:[M.kw,"3 caras","Alta aleación"] },
+
+    { mode:"esquema", at:0.78, hi:"chimenea", foco:{x:150,y:0,w:580,h:460},
+      eyebrow:"Evacuación", title:"Chimenea en el techo",
+      text:"Salida superior para evacuar los gases del proceso, con las partes estándar de operación segura a temperatura: guantes de alta temperatura y pinzas para crisol.",
+      specs:["Chimenea superior","Accesorios de operación"] },
+
+    { mode:"esquema", at:0.93, hi:"control", foco:{x:520,y:52,w:540,h:560},
+      eyebrow:"Control", title:"Programable por recetas",
+      text:"Controlador PID de pantalla táctil: hasta 15 programas de 30 segmentos cada uno, con descarga por USB. La rampa y el sostenimiento se programan una vez y se repiten igual en cada ciclo.",
+      specs:["1200 °C máx.","1100 °C continuo","15 × 30 segmentos"] }
+  ];
+
+  /* ==================== ARRANQUE ==================== */
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+  var dg = document.getElementById("dg");
+  var labels = document.getElementById("labels");
+  var seq = document.getElementById("seq");
+  var pre = document.getElementById("pre"), preBar = document.getElementById("preBar"), preTxt = document.getElementById("preTxt");
+  var kind = document.getElementById("kind");
+  var beatsWrap = document.getElementById("beats"), rail = document.getElementById("rail");
+  var stageEl = document.querySelector(".stage");
+
+  /* Cuánto mide el escenario y a qué altura se pega. Se lee del DOM en vez de asumir
+     100vh y top:0, porque en la propuesta el escenario se pega debajo de la barra. */
+  function stageAlto(){ return stageEl.offsetHeight || vh(); }
+  function stagePega(){ return parseFloat(getComputedStyle(stageEl).top) || 0; }
+  function span(){ return seq.offsetHeight - stageAlto(); }
+
+  function vh(){ return window.innerHeight || document.documentElement.clientHeight || 800; }
+  var lastW = 0;
+  function sizeSeq(){ seq.style.height = Math.round(BEATS.length * CFG.vhPorBeat / 100 * vh()) + "px"; }
+  sizeSeq();
+
+  function pathFor(i){
+    var s = String(i);
+    while (s.length < CFG.pad) s = "0" + s;
+    return CFG.dir + s + "." + CFG.ext;
+  }
+  function clamp(v,a,b){ return v < a ? a : v > b ? b : v; }
+  function smooth(t){ t = clamp(t,0,1); return t*t*(3-2*t); }
+  function lerpRect(a,b,t){
+    return { x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t, w:a.w+(b.w-a.w)*t, h:a.h+(b.h-a.h)*t };
+  }
+
+  /* ---------- copy y riel ---------- */
+  BEATS.forEach(function(b, i){
+    var el = document.createElement("div");
+    el.className = "beat";
+    el.dataset.on = i === 0 ? "1" : "0";
+    el.innerHTML =
+      '<div class="box"><span class="eyebrow">' + b.eyebrow + '</span>' +
+      '<h2>' + b.title + '</h2><p>' + b.text + '</p>' +
+      (b.specs && b.specs.length ? '<div class="specs"><span>' + b.specs.join('</span><span>') + '</span></div>' : '') +
+      '</div>';
+    beatsWrap.appendChild(el);
+
+    var dot = document.createElement("button");
+    dot.type = "button";
+    dot.setAttribute("aria-label", b.eyebrow + " — " + b.title);
+    dot.setAttribute("aria-current", i === 0 ? "true" : "false");
+    dot.addEventListener("click", function(){
+      window.scrollTo({ top: seq.offsetTop - stagePega() + span() * b.at, behavior: reduced ? "auto" : "smooth" });
+    });
+    rail.appendChild(dot);
+  });
+  var beatEls = [].slice.call(beatsWrap.children);
+  var railEls = [].slice.call(rail.children);
+
+  /* ---------- fallback sin movimiento ---------- */
+  if (reduced) {
+    document.documentElement.classList.add("no-motion");
+    var list = document.getElementById("staticList");
+    BEATS.forEach(function(b){
+      var a = document.createElement("article"), visual;
+      if (b.mode === "foto") {
+        visual = '<img src="' + pathFor(Math.max(1, Math.round(b.at / CFG.fotoHasta * CFG.count))) + '" alt="' + b.title + '" loading="lazy">';
+      } else {
+        var clone = dg.cloneNode(true);
+        clone.removeAttribute("id");
+        clone.setAttribute("data-hi", b.hi);
+        clone.setAttribute("viewBox", [b.foco.x, b.foco.y, b.foco.w, b.foco.h].join(" "));
+        visual = clone.outerHTML;
+      }
+      a.innerHTML = visual +
+        '<div><span class="eyebrow">' + b.eyebrow + (b.mode === "esquema" ? " · esquema" : "") + '</span>' +
+        '<h2 style="color:#fff;font-size:26px;margin:8px 0 10px">' + b.title + '</h2>' +
+        '<p style="color:var(--on-dark-dim)">' + b.text + '</p></div>';
+      list.appendChild(a);
+    });
+    return;
+  }
+
+  /* ---------- precarga de la secuencia fotográfica ---------- */
+  var imgs = new Array(CFG.count), loaded = 0, missing = 0, ready = false, PLACEHOLDER = false;
+
+  /* Arranca con los primeros cuadros y sigue cargando el resto en segundo plano. Se puede
+     porque el dibujado cae al cuadro cargado más cercano cuando el exacto todavía no llegó,
+     y porque el usuario recorre la secuencia de a poco. Esperar los 72 para mostrar algo es
+     medio megabyte de espera en balde. */
+  function arrancar(sinFrames){
+    if (ready) return;
+    ready = true;
+    PLACEHOLDER = !!sinFrames;
+    preTxt.textContent = PLACEHOLDER ? "Modo esquema — aún sin frames" : "Listo";
+    setTimeout(function(){ pre.hidden = true; render(); }, PLACEHOLDER ? 500 : 0);
+  }
+  function tick(){
+    var n = loaded + missing;
+    preBar.style.width = Math.round(n / CFG.count * 100) + "%";
+    if (!ready) preTxt.textContent = "Cargando recorrido… " + n + " / " + CFG.count;
+    if (loaded >= Math.min(CFG.arrancaCon, CFG.count)) arrancar(false);
+    else if (n === CFG.count) arrancar(loaded === 0);   // todo resuelto y nada cargó
+    if (ready) render();                               // los que llegan tarde se dibujan igual
+  }
+  for (var i = 1; i <= CFG.count; i++) (function(idx){
+    var im = new Image();
+    im.decoding = "async";
+    im.onload = function(){ imgs[idx-1] = im; loaded++; tick(); };
+    im.onerror = function(){ missing++; tick(); };
+    im.src = pathFor(idx);
+  })(i);
+
+  /* ---------- lienzo ---------- */
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    var r = cv.getBoundingClientRect();
+    cv.width = Math.round(r.width * dpr);
+    cv.height = Math.round(r.height * dpr);
+    render();
+  }
+  function drawCover(im, alfa){
+    var cw = cv.width, ch = cv.height;
+    var s = Math.max(cw / im.naturalWidth, ch / im.naturalHeight);
+    var w = im.naturalWidth * s, h = im.naturalHeight * s;
+    if (alfa === undefined) { ctx.clearRect(0,0,cw,ch); ctx.globalAlpha = 1; }
+    else ctx.globalAlpha = alfa;
+    ctx.drawImage(im, (cw-w)/2, (ch-h)/2, w, h);
+    ctx.globalAlpha = 1;
+  }
+  /* referencia mientras no existan los frames del tramo fotográfico */
+  function drawStub(p){
+    var cw = cv.width, ch = cv.height;
+    var g = ctx.createLinearGradient(0,0,0,ch);
+    g.addColorStop(0,"#12181B"); g.addColorStop(1,"#1C2429");
+    ctx.fillStyle = g; ctx.fillRect(0,0,cw,ch);
+    var u = Math.min(cw,ch)/100, cx = cw/2, cy = ch/2;
+    var bw = 34*u, bh = 44*u;
+    var open = clamp((p - .10) / .40, 0, 1);
+    ctx.save(); ctx.translate(cx,cy);
+    ctx.transform(1,0,-0.10*(1-p*.7),1,0,0);
+    ctx.fillStyle = "#0B1013"; ctx.fillRect(-bw/2,-bh/2,bw,bh);
+    ctx.strokeStyle = "rgba(233,237,238,.28)"; ctx.lineWidth = Math.max(1,.5*u);
+    for (var k=-2;k<=2;k++){ var y=k*7*u; ctx.beginPath(); ctx.moveTo(-bw/2+3*u,y); ctx.lineTo(bw/2-3*u,y); ctx.stroke(); }
+    ctx.strokeStyle = "#8DA0A8"; ctx.lineWidth = Math.max(1.6,.9*u);
+    ctx.strokeRect(-bw/2,-bh/2,bw,bh);
+    ctx.save();
+    ctx.translate(-bw/2,-bh/2);
+    ctx.transform(Math.cos(open*1.15),0,0,1,0,0);
+    var lg = ctx.createLinearGradient(0,0,bw,0);
+    lg.addColorStop(0,"#39454B"); lg.addColorStop(1,"#222C31");
+    ctx.fillStyle = lg; ctx.fillRect(0,0,bw,bh);
+    ctx.strokeStyle = "#A8B7BD"; ctx.lineWidth = Math.max(1.4,.8*u);
+    ctx.strokeRect(0,0,bw,bh);
+    ctx.fillStyle = "#FE6B03"; ctx.fillRect(bw-5*u, bh/2-5*u, 1.8*u, 10*u);
+    ctx.restore(); ctx.restore();
+    ctx.fillStyle = "rgba(147,161,168,.8)";
+    ctx.font = (3*u) + 'px "SF Mono", ui-monospace, Menlo, monospace';
+    ctx.textAlign = "center";
+    ctx.fillText("TRAMO FOTOGRÁFICO · SIN FRAMES EN frames/", cx, ch - 5*u);
+  }
+
+  /* ---------- render ---------- */
+  var progress = 0, curBeat = -1;
+  var EB = BEATS.filter(function(b){ return b.mode === "esquema"; });
+
+  function vbFor(p){
+    var first = EB[0];
+    if (p <= first.at) {
+      return lerpRect(VB_FULL, first.foco, smooth((p - CFG.fotoHasta) / Math.max(first.at - CFG.fotoHasta, .001)));
+    }
+    for (var i = 0; i < EB.length - 1; i++) {
+      var a = EB[i], b = EB[i+1];
+      if (p >= a.at && p <= b.at) return lerpRect(a.foco, b.foco, smooth((p - a.at) / (b.at - a.at)));
+    }
+    return EB[EB.length-1].foco;
+  }
+
+  function render(){
+    if (!ready) return;
+
+    /* mezcla foto ↔ esquema */
+    var mix = smooth((progress - CFG.fotoHasta) / CFG.fundido);   // 0 = foto · 1 = esquema
+    /* baja la luz de la foto antes del corte: sin esto el salto de brillo se nota */
+    var apaga = smooth((progress - (CFG.fotoHasta - 0.10)) / 0.10);
+    cv.style.filter = apaga > 0 ? "brightness(" + (1 - 0.62 * apaga).toFixed(3) + ")" : "";
+    cv.style.opacity = String(1 - mix);
+    dg.style.opacity = String(mix);
+    cv.style.visibility = mix > .995 ? "hidden" : "visible";
+    dg.style.visibility = mix < .005 ? "hidden" : "visible";
+
+    /* tramo fotográfico */
+    if (mix < 1) {
+      var pf = clamp(progress / CFG.fotoHasta, 0, 1);
+      if (PLACEHOLDER) drawStub(pf);
+      else {
+        /* Se dibuja el cuadro y se le mezcla el siguiente según la parte fraccionaria de la
+           posición. Sin esto el scroll lento se ve a saltos: con 61 cuadros cada uno cubre
+           mucho recorrido y se nota el escalón. Mezclando, el movimiento es continuo. */
+        var fx = pf * (CFG.count - 1);
+        var i0 = Math.floor(fx), t = fx - i0;
+        var a = imgs[i0], b = imgs[Math.min(i0 + 1, CFG.count - 1)];
+        if (!a) for (var d = 1; d < CFG.count && !a; d++) a = imgs[i0-d] || imgs[i0+d];
+        if (a) drawCover(a);
+        if (b && b !== a && t > 0.02) drawCover(b, t);
+        var f = i0 + 1;
+      }
+    }
+
+    /* esquema: zoom continuo hacia la pieza del beat */
+    if (mix > 0) {
+      var vb = vbFor(progress);
+      /* corre el dibujo a la derecha solo cuando la pieza enfocada está a la izquierda,
+         para que no quede debajo de la tarjeta de texto */
+      var cxv = vb.x + vb.w / 2;
+      var dx = (window.innerWidth > 900 && cxv < 560) ? -0.13 * vb.w : 0;
+      dg.setAttribute("viewBox", (vb.x+dx).toFixed(1)+" "+vb.y.toFixed(1)+" "+vb.w.toFixed(1)+" "+vb.h.toFixed(1));
+      labels.setAttribute("font-size", (13 * vb.w / VB_FULL.w).toFixed(2));   // el texto no crece con el zoom
+    }
+
+    kind.innerHTML = mix > .5 ? '<b>Esquema</b> · corte técnico, no fotografía' : 'Fotografía del equipo';
+  }
+
+  function setBeats(){
+    var idx = 0;
+    for (var i = 0; i < BEATS.length; i++) if (progress >= BEATS[i].at - .01) idx = i;
+    if (idx === curBeat) return;
+    curBeat = idx;
+    beatEls.forEach(function(el,i){ el.dataset.on = i === idx ? "1" : "0"; });
+    railEls.forEach(function(el,i){ el.setAttribute("aria-current", i === idx ? "true" : "false"); });
+    dg.setAttribute("data-hi", BEATS[idx].mode === "esquema" ? BEATS[idx].hi : "");
+  }
+
+  var queued = false;
+  function onScroll(){
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function(){
+      queued = false;
+      var s = span();
+      progress = s > 0 ? clamp((stagePega() - seq.getBoundingClientRect().top) / s, 0, 1) : 0;
+      render();
+      setBeats();
+    });
+  }
+
+  window.addEventListener("scroll", onScroll, { passive:true });
+  window.addEventListener("resize", function(){
+    if (window.innerWidth !== lastW) { lastW = window.innerWidth; sizeSeq(); }
+    resize(); onScroll();
+  });
+  lastW = window.innerWidth;
+  resize();
+  onScroll();
+})();
+</script>

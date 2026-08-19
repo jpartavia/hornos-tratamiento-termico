@@ -1,0 +1,19 @@
+Generador de index.html.
+
+  python3 construir.py     escribe ../index.html y copia los dos juegos de cuadros
+
+  diseno.py         sistema de diseño (paleta, tipografía, todas las reglas CSS)
+  secciones.py      el markup y el texto de cada sección
+  corte.svg.html    el corte esquemático del horno
+  motor.js.html     el motor del recorrido, tomado de 04-secuencia-scroll/prototipo-secuencia.html
+  logos.json        los logos en base64
+
+Se puede editar ../index.html directo para cambios rápidos, pero si se toca algo estructural
+conviene cambiarlo aquí y regenerar, para no perderlo en la próxima corrida.
+
+La paleta sale de la escala de incandescencia del acero: rojo cereza 700 °C, naranja 900 °C
+(que es justo el naranja de Elyon), amarillo 1100 °C, blanco 1200 °C. Los grises claros son
+el color de la fibra cerámica de la cámara.
+
+OJO: el index DEBE llevar <!DOCTYPE html>. Sin él el navegador entra en quirks mode y las
+tablas no heredan el color del padre — el texto de la proforma sale invisible sobre su fondo.

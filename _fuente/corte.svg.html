@@ -1,0 +1,103 @@
+<svg class="layer" id="dg" data-hi="" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet"
+         role="img" aria-label="Corte esquemático del horno: cámara de fibra cerámica de alúmina, resistencias en las dos paredes laterales y el fondo, chimenea de evacuación en el techo y gabinete de control con pantalla táctil.">
+      <defs>
+        <pattern id="fibra" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="9" stroke="#7E8C93" stroke-width="1.6" stroke-opacity=".55"/>
+        </pattern>
+        <linearGradient id="acero" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#46545B"/><stop offset="1" stop-color="#2A353A"/>
+        </linearGradient>
+        <radialGradient id="calor" cx="50%" cy="60%" r="60%">
+          <stop offset="0" stop-color="#FE6B03" stop-opacity=".38"/>
+          <stop offset="1" stop-color="#FE6B03" stop-opacity="0"/>
+        </radialGradient>
+        <marker id="fl" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M0 0 L10 5 L0 10 Z" fill="#FE6B03"/>
+        </marker>
+      </defs>
+
+      <!-- ===== CHIMENEA ===== -->
+      <g class="part p-chimenea">
+        <rect x="352" y="58" width="46" height="64" fill="url(#acero)" stroke="#8DA0A8" stroke-width="2"/>
+        <ellipse cx="375" cy="58" rx="23" ry="7" fill="#1A2227" stroke="#8DA0A8" stroke-width="2"/>
+        <path d="M375 46 V16" stroke="#FE6B03" stroke-width="2.4" marker-end="url(#fl)" stroke-dasharray="6 5"/>
+      </g>
+
+      <!-- ===== ENVOLVENTE Y CÁMARA ===== -->
+      <g class="part p-camara">
+        <rect x="120" y="120" width="520" height="400" rx="6" fill="url(#acero)" stroke="#A8B7BD" stroke-width="2.5"/>
+        <rect x="138" y="138" width="484" height="364" rx="4" fill="#232D33" stroke="#7E8C93" stroke-width="1.6"/>
+        <path d="M138 138 H622 V502 H138 Z M176 176 H584 V464 H176 Z" fill="url(#fibra)" fill-rule="evenodd"/>
+        <rect x="176" y="176" width="408" height="288" fill="#0B1013" stroke="#5B6B72" stroke-width="1.6"/>
+        <rect x="176" y="176" width="408" height="288" fill="url(#calor)"/>
+        <path d="M356 452 L368 414 H412 L424 452 Z" fill="#2E3A40" stroke="#8DA0A8" stroke-width="1.6"/>
+        <path d="M584 214 H520" stroke="#C9D4D8" stroke-width="2.2"/>
+        <circle cx="520" cy="214" r="5" fill="#C9D4D8"/>
+      </g>
+
+      <!-- ===== RESISTENCIAS · 3 caras ===== -->
+      <g class="part p-resistencias" fill="none" stroke-linecap="round">
+        <g class="glow" stroke="#FE6B03" stroke-opacity=".22" stroke-width="14">
+          <path d="M196 200 V440"/><path d="M564 200 V440"/><path d="M200 452 H560"/>
+        </g>
+        <g stroke="#FE6B03" stroke-width="3.4">
+          <path d="M190 196 C214 204 214 220 190 228 C214 236 214 252 190 260 C214 268 214 284 190 292 C214 300 214 316 190 324 C214 332 214 348 190 356 C214 364 214 380 190 388 C214 396 214 412 190 420 C214 428 214 444 190 452"/>
+          <path d="M570 196 C546 204 546 220 570 228 C546 236 546 252 570 260 C546 268 546 284 570 292 C546 300 546 316 570 324 C546 332 546 348 570 356 C546 364 546 380 570 388 C546 396 546 412 570 420 C546 428 546 444 570 452"/>
+          <path d="M206 458 C214 442 230 442 238 458 C246 442 262 442 270 458 C278 442 294 442 302 458 C310 442 326 442 334 458 C342 442 358 442 366 458 C374 442 390 442 398 458 C406 442 422 442 430 458 C438 442 454 442 462 458 C470 442 486 442 494 458 C502 442 518 442 526 458 C534 442 550 442 558 458"/>
+        </g>
+      </g>
+
+      <!-- ===== PUERTA (abierta, apertura lateral) ===== -->
+      <g class="part p-camara">
+        <path d="M120 120 L38 168 L38 552 L120 520 Z" fill="#39454B" stroke="#A8B7BD" stroke-width="2.2"/>
+        <path d="M52 300 L52 372" stroke="#0B1013" stroke-width="9" stroke-linecap="round"/>
+        <rect x="112" y="292" width="14" height="52" rx="3" fill="#FE6B03"/>
+      </g>
+
+      <!-- ===== GABINETE DE CONTROL ===== -->
+      <g class="part p-control">
+        <rect x="700" y="176" width="182" height="344" rx="6" fill="url(#acero)" stroke="#A8B7BD" stroke-width="2.5"/>
+        <rect x="720" y="200" width="142" height="104" rx="4" fill="#0E1417" stroke="#7E8C93" stroke-width="1.6"/>
+        <text x="736" y="232" fill="#E9EDEE" font-family="monospace" font-size="15">PV 1100</text>
+        <text x="736" y="256" fill="#FE6B03" font-family="monospace" font-size="15">SV 1100</text>
+        <text x="736" y="284" fill="#93A1A8" font-family="monospace" font-size="12">PROG 07/30</text>
+        <circle cx="746" cy="340" r="11" fill="#177A4C" stroke="#0B1013" stroke-width="1.6"/>
+        <circle cx="784" cy="340" r="11" fill="#B3261E" stroke="#0B1013" stroke-width="1.6"/>
+        <circle cx="822" cy="340" r="11" fill="#C7A008" stroke="#0B1013" stroke-width="1.6"/>
+        <rect x="720" y="372" width="142" height="120" rx="4" fill="#1B242A" stroke="#5B6B72" stroke-width="1.4"/>
+        <g stroke="#5B6B72" stroke-width="1.4">
+          <path d="M736 400 H846"/><path d="M736 424 H846"/><path d="M736 448 H846"/><path d="M736 472 H846"/>
+        </g>
+        <path d="M700 260 C670 260 660 214 640 214" stroke="#C9D4D8" stroke-width="2.2" fill="none"/>
+      </g>
+
+      <!-- ===== ETIQUETAS ===== -->
+      <g id="labels" font-family="'SF Mono', ui-monospace, Menlo, monospace" font-size="13">
+        <g class="lbl l-camara">
+          <path d="M660 150 H700" stroke="#FE6B03" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+          <text x="708" y="146" fill="#E9EDEE">Fibra cerámica de alúmina</text>
+          <text x="708" y="166" fill="#93A1A8" id="lblCamara">Cámara 400 × 600 × 400 mm</text>
+          <path d="M512 218 H436" stroke="#FE6B03" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+          <text x="428" y="214" fill="#C9D4D8" text-anchor="end">Termopar tipo N · ± 1 °C</text>
+        </g>
+        <g class="lbl l-resistencias">
+          <path d="M190 324 H124" stroke="#FE6B03" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+          <text x="116" y="320" fill="#E9EDEE" text-anchor="end">Pared izquierda</text>
+          <path d="M570 324 H650" stroke="#FE6B03" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+          <text x="658" y="320" fill="#E9EDEE">Pared derecha</text>
+          <path d="M382 472 V512" stroke="#FE6B03" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+          <text x="382" y="532" fill="#E9EDEE" text-anchor="middle">Fondo · 3 caras calefaccionadas</text>
+        </g>
+        <g class="lbl l-chimenea">
+          <path d="M398 80 H470" stroke="#FE6B03" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+          <text x="478" y="76" fill="#E9EDEE">Chimenea de evacuación</text>
+          <text x="478" y="96" fill="#93A1A8">Salida de gases del proceso</text>
+        </g>
+        <g class="lbl l-control">
+          <path d="M882 240 H920" stroke="#FE6B03" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+          <text x="928" y="236" fill="#E9EDEE">Control PID táctil</text>
+          <text x="928" y="256" fill="#93A1A8">15 programas × 30 segmentos</text>
+          <text x="928" y="276" fill="#93A1A8">Descarga por USB</text>
+        </g>
+      </g>
+    </svg>
