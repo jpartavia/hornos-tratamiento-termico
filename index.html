@@ -931,8 +931,8 @@
     /* dos juegos en WebP: el angosto para pantallas chicas. 1.3 MB contra 2.8 MB */
     dir:  window.innerWidth < 900 ? "frames-movil/" : "frames/",
     ext:  "webp", pad:4,
-    count: 61,           // frames de la secuencia fotográfica (beats 1 y 2)
-    arrancaCon: 12,      // no espera los 72: arranca con los primeros y sigue de fondo
+    count: 121,          // frames de la secuencia fotográfica (beats 1 y 2)
+    arrancaCon: 20,      // no espera los 72: arranca con los primeros y sigue de fondo
     fotoHasta: 0.34,     // hasta qué punto del scroll manda la foto (0–1)
     fundido:  0.06,      // ancho de la disolvencia foto → esquema
     vhPorBeat: 105       // alto de scroll por beat, en % de la ventana
@@ -1111,12 +1111,14 @@
     cv.height = Math.round(r.height * dpr);
     render();
   }
-  function drawCover(im){
+  function drawCover(im, alfa){
     var cw = cv.width, ch = cv.height;
     var s = Math.max(cw / im.naturalWidth, ch / im.naturalHeight);
     var w = im.naturalWidth * s, h = im.naturalHeight * s;
-    ctx.clearRect(0,0,cw,ch);
+    if (alfa === undefined) { ctx.clearRect(0,0,cw,ch); ctx.globalAlpha = 1; }
+    else ctx.globalAlpha = alfa;
     ctx.drawImage(im, (cw-w)/2, (ch-h)/2, w, h);
+    ctx.globalAlpha = 1;
   }
   /* referencia mientras no existan los frames del tramo fotográfico */
   function drawStub(p){
@@ -1184,10 +1186,16 @@
       var pf = clamp(progress / CFG.fotoHasta, 0, 1);
       if (PLACEHOLDER) drawStub(pf);
       else {
-        var f = clamp(Math.round(pf * (CFG.count - 1)) + 1, 1, CFG.count);
-        var im = imgs[f-1];
-        if (!im) for (var d = 1; d < CFG.count && !im; d++) im = imgs[f-1-d] || imgs[f-1+d];
-        if (im) drawCover(im);
+        /* Se dibuja el cuadro y se le mezcla el siguiente según la parte fraccionaria de la
+           posición. Sin esto el scroll lento se ve a saltos: con 61 cuadros cada uno cubre
+           mucho recorrido y se nota el escalón. Mezclando, el movimiento es continuo. */
+        var fx = pf * (CFG.count - 1);
+        var i0 = Math.floor(fx), t = fx - i0;
+        var a = imgs[i0], b = imgs[Math.min(i0 + 1, CFG.count - 1)];
+        if (!a) for (var d = 1; d < CFG.count && !a; d++) a = imgs[i0-d] || imgs[i0+d];
+        if (a) drawCover(a);
+        if (b && b !== a && t > 0.02) drawCover(b, t);
+        var f = i0 + 1;
       }
     }
 
