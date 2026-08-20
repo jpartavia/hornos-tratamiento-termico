@@ -296,15 +296,15 @@ TABLA_JS = """
   var M = [
     { cod:"STM-30-12W", tipo:"Muffle de mesa",     vol:"30 L", camara:"300 × 500 × 200 mm",
       kw:"7.5 kW", alim:"240 V o 480 V · 50/60 Hz",
-      puerta:"Apertura lateral", fibra:"Fibra cerámica de alúmina", extra:"Chimenea en el techo" },
+      puerta:"Apertura lateral", fibra:"Fibra cerámica de alúmina", extra:"Chimenea en el techo · partes estándar" },
     { cod:"STM-36-12",  tipo:"Muffle de mesa",     vol:"36 L", camara:"300 × 400 × 300 mm",
       kw:"9 kW",   alim:"240 V o 480 V · 50/60 Hz",
       puerta:"Apertura lateral", fibra:"Fibra cerámica de alúmina",
-      extra:"Envolvente de doble capa · pinza para crisol" },
+      extra:"Doble capa · pinza para crisol · partes estándar" },
     { cod:"STD-96-12",  tipo:"Industrial de piso", vol:"96 L", camara:"400 × 600 × 400 mm",
-      kw:"18 kW",  alim:"240 V o 480 V · trifásico",
-      puerta:"—", fibra:"Fibra cerámica policristalina grado 1500",
-      extra:"Guantes de alta temperatura · pinzas para crisol" }
+      kw:"18 kW",  alim:"240 V o 480 V · trifásico · 50/60 Hz",
+      puerta:"Apertura lateral", fibra:"Fibra cerámica policristalina grado 1500",
+      extra:"Guantes de alta temperatura · pinzas · partes estándar" }
   ];
   var FILAS = [["Tipo","tipo"],["Volumen útil","vol"],["Cámara","camara"],["Potencia","kw"],
                ["Alimentación","alim"],["Puerta","puerta"],["Material de cámara","fibra"],

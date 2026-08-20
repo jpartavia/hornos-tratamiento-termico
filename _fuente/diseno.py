@@ -99,8 +99,9 @@ CSS = """
   .escala{margin:56px 0 0;position:relative}
   .escala svg{width:100%;height:auto;display:block}
   .hero-lion{
-    position:absolute;right:1%;top:38px;width:clamp(120px,13vw,190px);
-    opacity:.10;pointer-events:none;user-select:none;
+    position:absolute;right:1.5%;top:44px;width:clamp(120px,13vw,196px);
+    opacity:.94;pointer-events:none;user-select:none;
+    filter:drop-shadow(0 12px 34px rgba(0,0,0,.55));
   }
   @media (max-width:860px){.hero-lion{display:none}}
   .cifras{
