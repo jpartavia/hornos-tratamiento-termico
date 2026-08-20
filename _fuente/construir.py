@@ -120,8 +120,6 @@ html = (
     + ns_sec["ALCANCE"]
     + ns_sec["DEFINICIONES"]
     + ns_sec["PLAN"]
-    + ns_sec["comercial"](L("leon_agua"), L("logo_pf"))
-    + ns_sec["DIRECTORIO"]
     + ns_sec["pie"](L("nav"))
     + motor
     + ns_sec["TABLA_JS"]

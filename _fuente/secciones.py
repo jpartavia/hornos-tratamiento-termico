@@ -106,8 +106,9 @@ MODELOS = """
     <div class="cab">
       <span class="rot rot--cla">Tres capacidades</span>
       <h2>Un mismo control, tres tamaños de cámara</h2>
-      <p>Toque un modelo para compararlo. Lo que cambia es el volumen útil, la potencia y la
-      alimentación; el control, el material de cámara y la precisión son los mismos en los tres.</p>
+      <p>Toque un modelo para compararlo. Lo que cambia es el volumen útil y la potencia; el
+      control, el material de cámara, la precisión y la tensión de trabajo son los mismos en
+      los tres.</p>
     </div>
 
     <div class="mods" id="mods" role="group" aria-label="Elegir modelo">
@@ -136,6 +137,20 @@ MODELOS = """
 
     <div class="tabla-envoltura">
       <table class="espec" id="espec"><tbody></tbody></table>
+    </div>
+
+    <div class="tension">
+      <div class="tension-cab">
+        <span class="rot rot--cla">Alimentación</span>
+        <h3>Los tres se entregan en la tensión que usted tenga</h3>
+      </div>
+      <div class="tension-ops">
+        <div><span class="v num">240<small>V</small></span><span class="k">estándar</span></div>
+        <div><span class="v num">480<small>V</small></span><span class="k">estándar</span></div>
+        <div><span class="v v--txt">Cualquiera</span><span class="k">bajo pedido</span></div>
+      </div>
+      <p>No hay que adaptar la planta al horno. Los equipos se fabrican para 240 V o 480 V como
+      estándar, y para cualquier otra tensión si su instalación lo pide.</p>
     </div>
 
     <p class="comun">Iguales en los tres — <b>1200 °C</b> de diseño y <b>1100 °C</b> continuos ·
@@ -230,20 +245,10 @@ DEFINICIONES = """
   <div class="wrap">
     <div class="cab">
       <span class="rot">Antes de la orden de compra</span>
-      <h2>Tres cosas que hay que definir con usted</h2>
+      <h2>Dos cosas que hay que definir con usted</h2>
       <p>Preferimos ponerlas por escrito ahora y no encontrarlas el día de la instalación.</p>
     </div>
     <div class="abiertas">
-      <article>
-        <span class="marca">abierto</span>
-        <div>
-          <h3>Tensión disponible en el sitio</h3>
-          <p>La ficha del fabricante indica 380 V, que no es una tensión de red en Costa Rica.
-          Necesitamos confirmar qué hay en el punto de instalación — típicamente 240 V monofásico
-          o 480 V trifásico — para definir si el equipo se solicita en esa tensión o si se incluye
-          un transformador. Es la definición con mayor efecto en el alcance y en el plazo.</p>
-        </div>
-      </article>
       <article>
         <span class="marca">abierto</span>
         <div>
@@ -286,124 +291,11 @@ PLAN = """
     <div class="plazo">
       <span class="v num">[[XX–XX]] semanas</span>
       <p>a partir de la orden de compra y la confirmación del anticipo. El plazo depende del modelo
-      y de la tensión solicitada; se confirma por escrito al cerrar las tres definiciones.</p>
+      y de la tensión solicitada; se confirma por escrito al cerrar las dos definiciones.</p>
     </div>
   </div>
 </section>
 """
-
-# ---------------------------------------------------------------- comercial
-def comercial(leon_agua, logo_pf):
-    return """
-<section class="sec sec--osc" id="inversion">
-  <div class="wrap">
-    <div class="cab">
-      <span class="rot">Inversión</span>
-      <h2>Precio, pago y respaldo</h2>
-    </div>
-    <div class="inv">
-      <article>
-        <span class="rot">Valor del suministro</span>
-        <div class="monto num">$[[MONTO]]</div>
-        <p>USD + IVA. Incluye equipo, importación, transporte, instalación, puesta en marcha y
-        capacitación.</p>
-      </article>
-      <article>
-        <span class="rot">Forma de pago</span>
-        <ul>
-          <li><b>[[50]] %</b> de anticipo contra aceptación de la propuesta y orden de compra.</li>
-          <li><b>[[50]] %</b> contra entrega del equipo instalado, previo a la puesta en marcha.</li>
-        </ul>
-      </article>
-      <article>
-        <span class="rot">Garantía · [[12]] meses</span>
-        <p>Cubre el equipo suministrado y la integración eléctrica realizada por Elyon, con soporte
-        técnico local durante todo el período.</p>
-      </article>
-    </div>
-
-    <div class="pf" role="group" aria-label="Hoja de cotización">
-      <img class="pf-leon" src="@AGUA@" alt="">
-      <div class="pf-top">
-        <img src="@PF@" alt="Elyon Industrial">
-        <div class="pf-meta">
-          <div class="no">PROFORMA N.º [[NÚMERO]]</div>
-          <div>Emitida el [[DD / MM / AAAA]]</div>
-          <div class="venc">Válida por [[7]] días</div>
-        </div>
-      </div>
-      <div class="pf-partes">
-        <div>
-          <h4>Emisor</h4>
-          <p><b>Elyon Industrial S.A.</b><br>
-          Céd. jur. 3‑101‑666295 · Colima de Tibás, San José, Costa Rica<br>
-          factura@elyonindustrial.com · 4600‑0787</p>
-        </div>
-        <div>
-          <h4>Cliente</h4>
-          <p><b>[[CLIENTE S.A.]]</b><br>
-          Céd. jur. [[3-101-XXXXXX]]<br>
-          [[correo@cliente.com]] · [[XXXX-XXXX]]</p>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <tr><th>Código</th><th>Descripción</th><th class="r">Cant.</th><th class="r">Unitario</th><th class="r">Monto</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="font-family:var(--dato);font-size:12px;white-space:nowrap">[[CÓDIGO]]</td>
-            <td>Horno de tratamiento térmico [[MODELO]] de [[XX]] litros, 1200 °C. Incluye
-            importación, transporte al sitio, instalación, conexionado, puesta en marcha, carga de
-            receta inicial y capacitación del personal.</td>
-            <td class="r">[[1]].00</td>
-            <td class="r">$[[MONTO]]</td>
-            <td class="r">$[[MONTO]]</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="pf-abajo">
-        <div class="pf-notas">
-          <p><b>Observaciones.</b> [[Referencia a la solicitud del cliente y alcance resumido.]]</p>
-          <p><b>Forma de pago.</b> [[50]] % de anticipo contra orden de compra · [[50]] % contra
-          entrega del equipo instalado.</p>
-          <p><b>Moneda.</b> Dólares estadounidenses.</p>
-          <div class="pf-bancos">
-            <div><b>Banco Nacional de Costa Rica</b><br>Colones CR80015103110010017933<br>Dólares CR11015103110026006133</div>
-            <div><b>BAC San José</b><br>Colones CR64010200009174579470<br>Dólares CR60010200009341422743</div>
-          </div>
-        </div>
-        <div class="pf-tot">
-          <div><span>Subtotal</span><span>$[[MONTO]]</span></div>
-          <div><span>Descuentos</span><span>$0.00</span></div>
-          <div><span>IVA 13 %</span><span>$[[IVA]]</span></div>
-          <div><span>Total</span><span>$[[TOTAL]]</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-""".replace("@AGUA@", leon_agua).replace("@PF@", logo_pf)
-
-
-DIRECTORIO = """
-<section class="sec sec--osc2" id="equipo-elyon">
-  <div class="wrap">
-    <div class="cab">
-      <span class="rot">Directorio del proyecto</span>
-      <h2>Quién responde</h2>
-      <p>Para cualquier consulta técnica, administrativa o de coordinación durante el proyecto.</p>
-    </div>
-    <div class="dir">
-      <article><b>José Pablo Artavia Masís</b><div class="cargo">Gerente de Proyectos e Ingeniería</div><p>jpartavia@elyonindustrial.com<br>8707‑1430</p></article>
-      <article><b>Juan Andrés Borbón Araya</b><div class="cargo">Encargado de Cuenta</div><p>aborbon@elyonindustrial.com<br>7036‑6410</p></article>
-      <article><b>Milly Rodríguez Villarreal</b><div class="cargo">Coordinadora de Proyectos</div><p>mrodriguez@elyonindustrial.com<br>6410‑4681</p></article>
-      <article><b>Marylowis Blanco Rodríguez</b><div class="cargo">Asistente Administrativa</div><p>mblanco@elyonindustrial.com<br>7143‑8545</p></article>
-    </div>
-  </div>
-</section>
-"""
-
 
 def nav(logo):
     return """
@@ -417,7 +309,6 @@ def nav(logo):
       <a href="#alcance">Alcance</a>
       <a href="#definiciones">Definiciones</a>
       <a href="#plan">Plan</a>
-      <a href="#inversion">Inversión</a>
     </div>
   </div>
 </nav>
@@ -441,14 +332,14 @@ TABLA_JS = """
   "use strict";
   var M = [
     { cod:"STM-30-12W", tipo:"Muffle de mesa",     vol:"30 L", camara:"300 × 500 × 200 mm",
-      kw:"7.5 kW", alim:"[[tensión a confirmar]] · monofásico · 50/60 Hz",
+      kw:"7.5 kW", alim:"240 V o 480 V · 50/60 Hz",
       puerta:"Apertura lateral", fibra:"Fibra cerámica de alúmina", extra:"Chimenea en el techo" },
     { cod:"STM-36-12",  tipo:"Muffle de mesa",     vol:"36 L", camara:"300 × 400 × 300 mm",
-      kw:"9 kW",   alim:"[[tensión a confirmar]] · monofásico · 50/60 Hz",
+      kw:"9 kW",   alim:"240 V o 480 V · 50/60 Hz",
       puerta:"Apertura lateral", fibra:"Fibra cerámica de alúmina",
       extra:"Envolvente de doble capa · pinza para crisol" },
     { cod:"STD-96-12",  tipo:"Industrial de piso", vol:"96 L", camara:"400 × 600 × 400 mm",
-      kw:"18 kW",  alim:"[[tensión a confirmar]] · trifásico",
+      kw:"18 kW",  alim:"240 V o 480 V · trifásico",
       puerta:"[[por confirmar]]", fibra:"Fibra cerámica policristalina grado 1500",
       extra:"Guantes de alta temperatura · pinzas para crisol" }
   ];

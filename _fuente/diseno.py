@@ -151,8 +151,35 @@ CSS = """
   }
   table.espec td{font-family:var(--dato);font-size:13.5px;color:var(--tinta);border-left:1px solid var(--linea-cla)}
   table.espec td.on{background:rgba(254,107,3,.07)}
+  /* ---------- TENSIÓN: deja de ser un pendiente y pasa a ser argumento ---------- */
+  .tension{
+    margin-top:44px;border-top:2px solid var(--tinta);padding-top:30px;
+    display:grid;grid-template-columns:1fr auto;gap:26px 56px;align-items:start;
+  }
+  @media (max-width:860px){.tension{grid-template-columns:1fr}}
+  .tension-cab h3{
+    font-size:clamp(22px,2.7vw,32px);letter-spacing:-.018em;color:var(--tinta);margin-top:12px;
+  }
+  .tension-ops{display:flex;gap:0;align-self:end;flex-wrap:wrap;justify-content:flex-end}
+  .tension-ops div{
+    padding:0 26px;border-left:1px solid var(--linea-cla);text-align:right;
+  }
+  .tension-ops div:first-child{border-left:0}
+  .tension-ops div:last-child{padding-right:0}
+  .tension-ops .v{
+    display:block;font-family:var(--display);font-size:38px;letter-spacing:-.03em;color:var(--cereza);
+  }
+  .tension-ops .v small{font-family:var(--dato);font-size:14px;letter-spacing:0;margin-left:2px}
+  .tension-ops .v--txt{font-size:27px;letter-spacing:-.01em}   /* palabra, no cifra: no se sale */
+  .tension-ops .k{
+    display:block;font-family:var(--dato);font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--acero-2);margin-top:6px;
+  }
+  .tension > p{grid-column:1 / -1;font-size:16px;color:var(--acero-2);max-width:56em}
+
   .comun{
-    margin-top:26px;font-size:15.5px;color:var(--acero-2);max-width:60em;
+    margin-top:34px;padding-top:26px;border-top:1px solid var(--linea-cla);
+    font-size:15.5px;color:var(--acero-2);max-width:60em;
   }
   .comun b{color:var(--tinta);font-family:var(--dato);font-size:13.5px}
 
@@ -265,7 +292,7 @@ CSS = """
   .dir .cargo{font-family:var(--dato);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--naranja);margin:7px 0 12px}
   .dir p{font-family:var(--dato);font-size:12px;color:var(--acero);line-height:1.9;word-break:break-word}
 
-  footer{border-top:1px solid var(--linea-osc);padding:34px 0 44px}
+  footer{border-top:1px solid var(--linea-osc);padding:44px 0 52px}
   footer .wrap{display:flex;flex-wrap:wrap;gap:16px 30px;justify-content:space-between;align-items:center}
   footer img{height:36px;display:block}
   footer p{font-family:var(--dato);font-size:11.5px;letter-spacing:.06em;color:var(--acero-2)}
