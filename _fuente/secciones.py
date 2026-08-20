@@ -9,7 +9,7 @@ def hero(logo_leon):
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <span class="rot">Propuesta técnica · [[CLIENTE]]</span>
+        <span class="rot">Propuesta técnica · Elyon Industrial</span>
         <h1>Calor parejo,<br>ciclo tras <em>ciclo</em></h1>
       </div>
       <p class="bajada">Hornos de tratamiento térmico con <b>calefacción en tres caras</b>, cámara
@@ -288,11 +288,6 @@ PLAN = """
       <div><span class="n">05</span><h3>Instalación</h3><p>Ubicación, conexionado eléctrico y verificación de servicios.</p></div>
       <div><span class="n">06</span><h3>Arranque</h3><p>Pruebas de calentamiento y control, receta inicial y capacitación.</p></div>
     </div>
-    <div class="plazo">
-      <span class="v num">[[XX–XX]] semanas</span>
-      <p>a partir de la orden de compra y la confirmación del anticipo. El plazo depende del modelo
-      y de la tensión solicitada; se confirma por escrito al cerrar las dos definiciones.</p>
-    </div>
   </div>
 </section>
 """
@@ -320,7 +315,7 @@ def pie(logo):
 <footer>
   <div class="wrap">
     <img src="@LOGO@" alt="Elyon Industrial">
-    <p>PROPUESTA DE SUMINISTRO · HORNOS DE TRATAMIENTO TÉRMICO · [[CLIENTE]] · 2026</p>
+    <p>PROPUESTA DE SUMINISTRO · HORNOS DE TRATAMIENTO TÉRMICO · 2026</p>
   </div>
 </footer>
 """.replace("@LOGO@", logo)
@@ -340,7 +335,7 @@ TABLA_JS = """
       extra:"Envolvente de doble capa · pinza para crisol" },
     { cod:"STD-96-12",  tipo:"Industrial de piso", vol:"96 L", camara:"400 × 600 × 400 mm",
       kw:"18 kW",  alim:"240 V o 480 V · trifásico",
-      puerta:"[[por confirmar]]", fibra:"Fibra cerámica policristalina grado 1500",
+      puerta:"—", fibra:"Fibra cerámica policristalina grado 1500",
       extra:"Guantes de alta temperatura · pinzas para crisol" }
   ];
   var FILAS = [["Tipo","tipo"],["Volumen útil","vol"],["Cámara","camara"],["Potencia","kw"],

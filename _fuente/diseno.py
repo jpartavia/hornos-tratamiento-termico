@@ -223,7 +223,7 @@ CSS = """
   .etapas{display:grid;grid-template-columns:repeat(6,1fr);border-top:2px solid var(--linea-cla)}
   @media (max-width:960px){.etapas{grid-template-columns:repeat(3,1fr)}}
   @media (max-width:560px){.etapas{grid-template-columns:1fr;border-top:0}}
-  .etapas div{padding:24px 22px 30px 0;position:relative}
+  .etapas div{padding:24px 22px 8px 0;position:relative}
   .etapas div::before{
     content:"";position:absolute;top:-2px;left:0;width:26px;height:2px;background:var(--cereza);
   }
