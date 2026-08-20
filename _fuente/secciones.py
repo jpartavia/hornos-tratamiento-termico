@@ -9,7 +9,7 @@ def hero(logo_leon):
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <span class="rot">Propuesta técnica · Elyon Industrial</span>
+        <span class="rot">Elyon Industrial · Tratamiento térmico</span>
         <h1>Calor parejo,<br>ciclo tras <em>ciclo</em></h1>
       </div>
       <p class="bajada">Hornos de tratamiento térmico con <b>calefacción en tres caras</b>, cámara
@@ -220,7 +220,7 @@ ALCANCE = """
   <div class="wrap">
     <div class="cab">
       <span class="rot rot--cla">Alcance</span>
-      <h2>Qué entrega Elyon</h2>
+      <h2>Qué incluye el suministro</h2>
       <p>La responsabilidad no termina en la bodega. Termina cuando el horno corre su primer ciclo
       con su gente operándolo.</p>
     </div>
@@ -239,46 +239,15 @@ ALCANCE = """
 </section>
 """
 
-# ---------------------------------------------------------------- definiciones
-DEFINICIONES = """
-<section class="sec sec--osc2" id="definiciones">
-  <div class="wrap">
-    <div class="cab">
-      <span class="rot">Antes de la orden de compra</span>
-      <h2>Dos cosas que hay que definir con usted</h2>
-      <p>Preferimos ponerlas por escrito ahora y no encontrarlas el día de la instalación.</p>
-    </div>
-    <div class="abiertas">
-      <article>
-        <span class="marca">abierto</span>
-        <div>
-          <h3>Área de instalación y ruta de ingreso</h3>
-          <p>Los modelos de mesa necesitan una superficie firme y nivelada con espacio de servicio
-          alrededor. El de 96 litros es de piso y llega con su gabinete de control. Verificamos
-          medidas y ruta antes del despacho.</p>
-        </div>
-      </article>
-      <article>
-        <span class="marca">abierto</span>
-        <div>
-          <h3>El proceso y el modelo</h3>
-          <p>Qué se va a tratar, a qué temperatura y con qué ciclo. De eso depende la capacidad que
-          conviene y la receta con la que se entrega el equipo configurado.</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-"""
-
 # ---------------------------------------------------------------- plan
 PLAN = """
 <section class="sec sec--fibra" id="plan">
   <div class="wrap">
     <div class="cab">
-      <span class="rot rot--cla">Plan de ejecución</span>
+      <span class="rot rot--cla">De la orden al arranque</span>
       <h2>Cómo llega el equipo</h2>
-      <p>El orden importa: cada etapa depende de que la anterior esté cerrada por escrito.</p>
+      <p>Seis etapas, y Elyon responde por todas. El horno no se entrega en bodega: se entrega
+      corriendo su primer ciclo.</p>
     </div>
     <div class="etapas">
       <div><span class="n">01</span><h3>Orden de compra</h3><p>Modelo, tensión de operación y configuración confirmados.</p></div>
@@ -302,8 +271,7 @@ def nav(logo):
       <a href="#modelos">Modelos</a>
       <a href="#tecnologia">Tecnología</a>
       <a href="#alcance">Alcance</a>
-      <a href="#definiciones">Definiciones</a>
-      <a href="#plan">Plan</a>
+      <a href="#plan">Entrega</a>
     </div>
   </div>
 </nav>
@@ -315,7 +283,7 @@ def pie(logo):
 <footer>
   <div class="wrap">
     <img src="@LOGO@" alt="Elyon Industrial">
-    <p>PROPUESTA DE SUMINISTRO · HORNOS DE TRATAMIENTO TÉRMICO · 2026</p>
+    <p>HORNOS DE TRATAMIENTO TÉRMICO · ELYON INDUSTRIAL · 2026</p>
   </div>
 </footer>
 """.replace("@LOGO@", logo)

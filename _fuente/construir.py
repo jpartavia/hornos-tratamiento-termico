@@ -108,7 +108,7 @@ html = (
     # padre: el texto de la proforma salía del mismo color que su fondo, invisible.
     '<!DOCTYPE html>\n'
     '<meta charset="utf-8">\n'
-    '<title>Hornos de tratamiento térmico — Propuesta técnica · Elyon Industrial</title>\n'
+    '<title>Hornos de tratamiento térmico hasta 1200 °C · Elyon Industrial</title>\n'
     '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
     '<style>' + ns_css["CSS"] + STAGE_CSS + '</style>\n'
     + ns_sec["nav"](L("nav"))
@@ -118,7 +118,6 @@ html = (
     + ns_sec["MODELOS"]
     + ns_sec["TECNOLOGIA"]
     + ns_sec["ALCANCE"]
-    + ns_sec["DEFINICIONES"]
     + ns_sec["PLAN"]
     + ns_sec["pie"](L("nav"))
     + motor
